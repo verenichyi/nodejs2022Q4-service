@@ -1,34 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import * as uuid from 'uuid';
 import CreateUserDto from './dto/create-user.dto';
-import User from './interfaces/user.interface';
+import DB from '../utils/DB/DB';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      id: 'id',
-      login: 'login',
-      password: 'password',
-      version: 0,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    },
-  ];
+  constructor(private database: DB) {}
   async getAllUsers() {
-    return this.users;
+    return this.database.users.findMany();
   }
 
   async createUser(user: CreateUserDto) {
-    const newUser = {
-      id: uuid.v4(),
-      ...user,
-      version: 0,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    this.users.push(newUser);
-
-    return newUser;
+    return this.database.users.create(user);
   }
 }
