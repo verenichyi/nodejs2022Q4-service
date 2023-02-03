@@ -1,7 +1,10 @@
-import User from '../users/interfaces/user.interface';
-import { ReturnUser } from '../users/types/return-user.type';
-
-export const excludePasswordFromUser = (user: User): ReturnUser => {
-  const { id, login, version, createdAt, updatedAt } = user;
-  return { id, login, version, createdAt, updatedAt };
+export const excludeFieldFromObj = <T, K extends keyof T>(
+  obj: T,
+  ...props: K[]
+): Omit<T, K> => {
+  const result = { ...obj };
+  props.forEach((prop) => {
+    delete result[prop];
+  });
+  return result;
 };
